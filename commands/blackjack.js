@@ -33,6 +33,10 @@ module.exports = {
 async function initGame(interaction) {
   var nameUser = interaction.user.username
   let date = dateFormater()
-  await createChannels('blackjack', nameUser, date)
-  await interaction.reply("blackjack")
+  let channel = await createChannels(interaction,'blackjack', nameUser, date,'🃏')
+  if(channel != null){
+    await interaction.reply({ content: `🃏 Check out this channel ${channel} to start playing 🃏`, ephemeral: true})
+  }else{
+    await interaction.reply({ content: `⚠️ Oops, something didn't work. Try again later or contact support. ⚠️`, ephemeral: true})
+  }
 }

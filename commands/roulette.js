@@ -13,7 +13,8 @@ var timeout = []
 module.exports = {
   data:  new SlashCommandBuilder()
         .setName("roullete")
-        .setDescription("Casino game - Roulette 🎡"),
+        .setDescription("Casino game - Roulette 🎡")
+        .setDMPermission(false),
     async execute(interaction){
       if(timeout.includes(interaction.user.id)){
         console.log(`User ${interaction.user.username} está a spammar o bot`)
@@ -32,6 +33,10 @@ module.exports = {
 async function initGame(interaction) {
   var nameUser = interaction.user.username
   let date = dateFormater()
-  await createChannels('roullete', nameUser, date)
-  await interaction.reply("roullete")
+  let channel = await createChannels(interaction,'roullete', nameUser, date, '🎡')
+  if(channel != null){
+    await interaction.reply({ content: `🎡 Check out this channel ${channel} to start playing 🎡`, ephemeral: true})
+  }else{
+    await interaction.reply({ content: `⚠️ Oops, something didn't work. Try again later or contact support. ⚠️`, ephemeral: true})
+  }
 }
