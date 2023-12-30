@@ -1,11 +1,14 @@
 //discord js
-const { Client, Events, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, ActivityType, User } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 
 //dotenv
 const dotenv = require('dotenv')
 dotenv.config()
 const { TOKEN } = process.env
+
+//SQLITE - sequelize
+const UserCredits = require('./models/user-credits')
 
 //import commands
 const fs = require("node:fs")
@@ -57,6 +60,7 @@ let status = [
     },
   ];
 client.once(Events.ClientReady, readyClient => {
+    UserCredits.sync()
     console.log(`✅ ${readyClient.user.tag} is online.`);
     setInterval(() => {
         let random = Math.floor(Math.random() * status.length);

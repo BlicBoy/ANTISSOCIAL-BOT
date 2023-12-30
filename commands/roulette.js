@@ -5,8 +5,9 @@
  */
 
 const { SlashCommandBuilder } = require("discord.js")
-const { createChannels } = require("./helpers/createChannel")
-const { dateFormater } = require("./helpers/other")
+const { createChannels } = require("../helpers/createChannel")
+const { dateFormater } = require("../helpers/other")
+const { giveFirstCredits } = require("../helpers/credits")
 
 var timeout = []
 
@@ -31,12 +32,19 @@ module.exports = {
 }
 
 async function initGame(interaction) {
-  var nameUser = interaction.user.username
-  let date = dateFormater()
-  let channel = await createChannels(interaction,'roullete', nameUser, date, '🎡')
-  if(channel != null){
-    await interaction.reply({ content: `🎡 Check out this channel ${channel} to start playing 🎡`, ephemeral: true})
-  }else{
-    await interaction.reply({ content: `⚠️ Oops, something didn't work. Try again later or contact support. ⚠️`, ephemeral: true})
+
+  try {
+    var nameUser = interaction.user.username
+    let date = dateFormater()
+    let channel = await createChannels(interaction,'roullete', nameUser, date, '🎡')
+    if(channel != null){
+      await interaction.reply({ content: `🎡 Check out this channel ${channel} to start playing 🎡`, ephemeral: true})
+      await giveFirstCredits(interaction)
+    }else{
+      await interaction.reply({ content: `⚠️ Oops, something didn't work. Try again later or contact support. ⚠️`, ephemeral: true})
+    }
+  } catch (error) {
+    console.error(error)
   }
+
 }

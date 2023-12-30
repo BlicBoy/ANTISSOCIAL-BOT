@@ -26,3 +26,9 @@ Whenever a command is added to the bot, it is necessary to run the deploy-comand
 ```bash
 node .\deploy-commands.js
 ```
+
+## Create Database
+
+```bash
+npm i sequelize sqlite3
+```
