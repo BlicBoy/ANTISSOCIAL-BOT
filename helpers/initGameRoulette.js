@@ -1,5 +1,4 @@
-async function messageBet(channel, interaction) {
-    console.log('teste')   
+async function messageBet(channel, interaction) {   
 }
 
 exports.messageBet = messageBet
