@@ -33,9 +33,22 @@ async function giveFirstCredits(interaction){
 
 async function giveCredits(interaction){
     try {
-        let info = await getCredits
+        console.log(interaction.options.get('user'))
+        let info = await getCredits(interaction.options.get('user').user.id)
         if(info){
-            
+            //update
+        }else{
+            const usercredits = await UserCredits.create({
+                id_player: interaction.options.get('user').user.id,
+                name: interaction.options.get('user').user.username,
+                credits: interaction.options.get('chips').value
+            })
+
+            if(usercredits){
+                await interaction.reply({ content: `${interaction.options.get('user').user} received  ${interaction.options.get('chips').value} `, ephemeral: false})
+            }else{
+                await interaction.reply({ content: `Error could not assign chips to ${interaction.options.get('user').user}`, ephemeral: false})
+            }
         }
     } catch (error) {
         console.error(error)
@@ -44,3 +57,4 @@ async function giveCredits(interaction){
 
 exports.giveFirstCredits = giveFirstCredits
 exports.getCredits = getCredits
+exports.giveCredits = giveCredits

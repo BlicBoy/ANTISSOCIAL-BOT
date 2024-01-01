@@ -13,7 +13,7 @@ var timeout = []
 
 module.exports = {
   data:  new SlashCommandBuilder()
-        .setName("roullete")
+        .setName("roullete-dev")
         .setDescription("Casino game - Roulette 🎡")
         .setDMPermission(false),
     async execute(interaction){
