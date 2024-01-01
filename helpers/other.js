@@ -15,4 +15,8 @@ function dateFormater() {
     return dataFormatada
 }
 
+async function openActivityGame(channel, interaction, credits, initDate){
+    
+}
+
 exports.dateFormater = dateFormater

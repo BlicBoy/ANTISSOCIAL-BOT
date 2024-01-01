@@ -22,7 +22,6 @@ async function createChannels(interaction,gameName, userName, date, emoji) {
               },
           ],
           });
-        await callPlayer(channel, interaction.user, gameName)
         return channel
 
       } catch (error) {
