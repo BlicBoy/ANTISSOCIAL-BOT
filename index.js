@@ -9,6 +9,8 @@ const { TOKEN } = process.env
 
 //SQLITE - sequelize
 const UserCredits = require('./models/user-credits')
+const GameActivity = require('./models/game-activity')
+
 
 //import commands
 const fs = require("node:fs")
@@ -61,6 +63,7 @@ let status = [
   ];
 client.once(Events.ClientReady, readyClient => {
     UserCredits.sync()
+    GameActivity.sync()
     console.log(`✅ ${readyClient.user.tag} is online.`);
     setInterval(() => {
         let random = Math.floor(Math.random() * status.length);
