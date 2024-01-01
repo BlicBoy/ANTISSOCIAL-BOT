@@ -5,8 +5,8 @@
 */
 
 const { SlashCommandBuilder } = require("discord.js")
-const { createChannels } = require("./helpers/createChannel")
-const { dateFormater } = require("./helpers/other")
+const { createChannels } = require("../helpers/createChannel")
+const { dateFormater } = require("../helpers/other")
 
 var timeout = []
 

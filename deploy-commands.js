@@ -26,7 +26,7 @@ async function loadCommands() {
             await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
         }else if(AMBIENT == 'dev'){
             console.log('IN DEV')
-            await rest.put(Routes.applicationCommands(CLIENT_ID, GUILD_ID), { body: commands });
+            await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands });
         }
         
         console.log('Successfully reloaded application (/) commands.');
