@@ -28,9 +28,9 @@ const UserCredits = sequelize.define('game-activity',{
         type: Sequelize.STRING,
         allowNull: true
     },
-    channel_id:{
+    channel:{
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
     }
 })
 

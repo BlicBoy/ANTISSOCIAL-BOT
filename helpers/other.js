@@ -1,3 +1,5 @@
+const GameActivity = require('../models/game-activity')
+
 /**
  * Date formater
  * @returns 
@@ -15,8 +17,45 @@ function dateFormater() {
     return dataFormatada
 }
 
-async function openActivityGame(channel, interaction, credits, initDate){
-    
+/**
+ * Save information game in database
+ *  
+ */
+async function openActivityGame(channel, interaction, credits, initDate, game){
+    try {
+        let result = GameActivity.create({
+                id_player: interaction.user.id,
+                game: game,
+                init_balance: credits,
+                current_balance: credits,
+                init_date: initDate,
+                finish_date: null,
+                channel: channel.id
+            }) 
+        if(result){
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+   
 }
 
+async function checktActivity(interaction, nameGame) {
+    try {
+       result = await GameActivity.findOne({where: {id_player : interaction.user.id, finish_date: null, game: nameGame }})
+       if(result) return result
+       return null
+    } catch (error) {
+        console.error(error)
+        return error
+    }
+}
+
+
 exports.dateFormater = dateFormater
+exports.openActivityGame = openActivityGame
+exports.checktActivity = checktActivity

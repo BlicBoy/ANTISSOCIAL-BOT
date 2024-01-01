@@ -1,11 +1,13 @@
 const { ChannelType, PermissionsBitField  } = require("discord.js",);
+const { dateFormater, openActivityGame } = require("./other")
+
 /**
  * Create channel text name
  * @param {*} gameName 
  * @param {*} userName 
  * @param {*} date 
  */
-async function createChannels(interaction,gameName, userName, date, emoji) {
+async function createChannels(interaction,gameName, userName, date, emoji, credits) {
     try {
         var name =  emoji + gameName + '-' + userName + '-' + date
         var channel = await interaction.guild.channels.create({
@@ -22,16 +24,13 @@ async function createChannels(interaction,gameName, userName, date, emoji) {
               },
           ],
           });
+        await openActivityGame(channel,interaction,credits,dateFormater(),gameName)
         return channel
 
       } catch (error) {
         console.log(error);
         return
       }
-}
-
-async function callPlayer(channel, user, game) {
-   await channel.send(`Hello ${user} , let's start playing ${game}!`)
 }
 
 exports.createChannels = createChannels;
