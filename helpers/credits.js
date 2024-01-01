@@ -33,10 +33,14 @@ async function giveFirstCredits(interaction){
 
 async function giveCredits(interaction){
     try {
-        console.log(interaction.options.get('user'))
         let info = await getCredits(interaction.options.get('user').user.id)
         if(info){
-            //update
+            const updatedCredits =  await UserCredits.update({ credits: (info.credits + interaction.options.get('chips').value) }, { where: { id_player: interaction.options.get('user').user.id } });
+            if(updatedCredits){
+                await interaction.reply({ content: `${interaction.options.get('user').user} received  ${interaction.options.get('chips').value} chips`, ephemeral: false})
+            }else{
+                await interaction.reply({ content: `Error could not assign chips to ${interaction.options.get('user').user}`, ephemeral: false})
+            }
         }else{
             const usercredits = await UserCredits.create({
                 id_player: interaction.options.get('user').user.id,
@@ -45,7 +49,7 @@ async function giveCredits(interaction){
             })
 
             if(usercredits){
-                await interaction.reply({ content: `${interaction.options.get('user').user} received  ${interaction.options.get('chips').value} `, ephemeral: false})
+                await interaction.reply({ content: `${interaction.options.get('user').user} received  ${interaction.options.get('chips').value} chips`, ephemeral: false})
             }else{
                 await interaction.reply({ content: `Error could not assign chips to ${interaction.options.get('user').user}`, ephemeral: false})
             }

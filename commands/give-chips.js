@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js")
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js")
 const { giveCredits } = require ("../helpers/credits")
 
 module.exports = {
@@ -14,7 +14,9 @@ module.exports = {
             option => option.setName('chips')
             .setDescription('Number Chips')
             .setRequired(true)
-        ), 
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+	    .setDMPermission(false), 
     async execute(interaction) {
          await giveCredits(interaction)
     }
