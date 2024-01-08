@@ -18,6 +18,7 @@ async function messageBet(channel, interaction) {
   		{ name: '\\\\black', value: 'Some value here', inline: true },
   		{ name: '\\\\green', value: 'Some value here', inline: true },
   		{ name: '\\\\number', value: 'Some value here', inline: true },
+		{ name: '\\\\Close', value: 'Stop playing game', inline: true },
 	)
 	.setImage('https://i.makeagif.com/media/11-22-2017/gXYMAo.gif')
 	.setTimestamp()

@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../utils/database')
 
-const UserCredits = sequelize.define('game-activity',{
+const GameResumes = sequelize.define('game-resumes',{
     id_player:{
         type: Sequelize.STRING,
-        unique: true,
+        allowNull: false
     },
     game:{
         type: Sequelize.STRING,
@@ -31,7 +31,11 @@ const UserCredits = sequelize.define('game-activity',{
     channel:{
         type: Sequelize.STRING,
         allowNull: true
+    },
+    reason_close:{
+        type: Sequelize.STRING,
+        allowNull: true
     }
 })
 
-module.exports = UserCredits
+module.exports = GameResumes

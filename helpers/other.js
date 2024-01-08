@@ -1,4 +1,4 @@
-const GameActivity = require('../models/game-activity')
+const GameResumes = require('../models/game-resumes')
 
 /**
  * Date formater
@@ -23,14 +23,15 @@ function dateFormater() {
  */
 async function openActivityGame(channel, interaction, credits, initDate, game){
     try {
-        let result = GameActivity.create({
+        let result = GameResumes.create({
                 id_player: interaction.user.id,
                 game: game,
                 init_balance: credits,
                 current_balance: credits,
                 init_date: initDate,
                 finish_date: null,
-                channel: channel.id
+                channel: channel.id,
+                reason_close: null
             }) 
         if(result){
             return true
@@ -46,7 +47,7 @@ async function openActivityGame(channel, interaction, credits, initDate, game){
 
 async function checktActivity(interaction, nameGame) {
     try {
-       result = await GameActivity.findOne({where: {id_player : interaction.user.id, finish_date: null, game: nameGame }})
+       result = await GameResumes.findOne({where: {id_player : interaction.user.id, finish_date: null, game: nameGame }})
        if(result) return result
        return null
     } catch (error) {
