@@ -18,11 +18,11 @@ module.exports = {
     .setDescription("Casino game - Roulette 🎡")
     .setDMPermission(false),
   async execute(interaction) {
-   //if (timeout.includes(interaction.user.id)) {
-   //  console.log(`User ${interaction.user.username} está a spammar o bot`)
-   //  await interaction.reply({ content: ' 🛑 You are on cooldown, try again in 1 minute 🛑', ephemeral: true })
-   //  return
-   //}
+    if (timeout.includes(interaction.user.id)) {
+      console.log(`User ${interaction.user.username} está a spammar o bot`)
+      await interaction.reply({ content: ' 🛑 You are on cooldown, try again in 1 minute 🛑', ephemeral: true })
+      return
+    }
     await initGame(interaction)
 
     timeout.push(interaction.user.id)
