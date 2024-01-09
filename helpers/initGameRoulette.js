@@ -1,5 +1,6 @@
-const { EmbedBuilder } = require("discord.js")
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, Message } = require("discord.js")
 const {getCredits } = require('./credits')
+const {closeChannels} = require('./createChannel')
 
 async function messageBet(channel, interaction) {
 
@@ -14,19 +15,49 @@ async function messageBet(channel, interaction) {
 	.setThumbnail('https://i.imgur.com/cwYlwJp.jpg')
 	.addFields(
 		{ name: `You have ${info.credits} chips`, value: `\n` },
-		{ name: '\\\\red', value: 'Some value here', inline: true },
-  		{ name: '\\\\black', value: 'Some value here', inline: true },
-  		{ name: '\\\\green', value: 'Some value here', inline: true },
-  		{ name: '\\\\number', value: 'Some value here', inline: true },
-		{ name: '\\\\Close', value: 'Stop playing game', inline: true },
 	)
 	.setImage('https://i.makeagif.com/media/11-22-2017/gXYMAo.gif')
 	.setTimestamp()
 	.setFooter({ text: 'Anti$$ocial - BOT', iconURL: 'https://i.imgur.com/cwYlwJp.jpg' });
+	
+	const closeGame = new ButtonBuilder()
+	.setLabel('Close Game')
+	.setStyle(ButtonStyle.Danger)
+	.setCustomId('close-button')
 
+	const red = new ButtonBuilder()
+	.setLabel('RED - 🔴')
+	.setStyle(ButtonStyle.Primary)
+	.setCustomId('red-button')
 
+	const black = new ButtonBuilder()
+	.setLabel('BLACK - ⚫')
+	.setStyle(ButtonStyle.Primary)
+	.setCustomId('black-button')
 
-     await channel.send({ embeds : [messageBet] })
+	const number = new ButtonBuilder()
+	.setLabel('Number - 🔢')
+	.setStyle(ButtonStyle.Primary)
+	.setCustomId('number-button')
+	
+	const buttonRow = new ActionRowBuilder().addComponents(red, black,number, closeGame)
+
+     const reply = await channel.send({ embeds : [messageBet], components: [buttonRow] })
+	 
+	 const filter = (i) => i.user.id === interaction.user.id
+
+	 const collector = reply.createMessageComponentCollector({
+		componentType: ComponentType.Button,
+		filter
+	 })
+
+	 collector.on('collect',async (interaction) =>{
+		if(interaction.customId == 'close-button'){	
+			await closeChannels(interaction.channelId, 'Player close the game', 'roullete', interaction.user.id)
+			const fetchedChannel = interaction.guild.channels.cache.get(interaction.channelId);
+			fetchedChannel.delete();
+		}
+	 })
 }
 
 exports.messageBet = messageBet

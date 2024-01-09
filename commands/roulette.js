@@ -61,7 +61,7 @@ async function initGame(interaction) {
 }
 
 /**
- * IF EXIST ROOM
+ * CHECK IF EXIST ROOM
  * @returns 
  */
 async function checkRoom(interaction) {
