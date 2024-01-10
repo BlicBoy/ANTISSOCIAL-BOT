@@ -55,8 +55,16 @@ async function checktActivity(interaction, nameGame) {
         return error
     }
 }
+async function deleteMessage(interaction){
+    const channel = interaction.guild.channels.cache.get(interaction.channelId)
+	const amount = 10;
+	const messages = await channel.messages.fetch({ limit: amount + 1 });
+	await channel.bulkDelete(messages);
+
+}
 
 
 exports.dateFormater = dateFormater
 exports.openActivityGame = openActivityGame
 exports.checktActivity = checktActivity
+exports.deleteMessage = deleteMessage

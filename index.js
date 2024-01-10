@@ -28,6 +28,9 @@ for (const file of commandFiles) {
     }
 }
 
+//othersImports
+const { confirmBet } = require('./helpers/initGameRoulette')
+
 //Login bot
 let status = [
     {
@@ -75,12 +78,20 @@ client.login(TOKEN);
 //listener interect
 client.on(Events.InteractionCreate, async interaction => {
     try {
+        if(interaction.isModalSubmit()){
+            await confirmBet(interaction)
+        }
+
         if (!interaction.isChatInputCommand()) return
         const command = interaction.client.commands.get(interaction.commandName)
         if (!command) return
         await command.execute(interaction)
+
+       
+
     } catch (error) {
         console.error(error)
         await interaction.reply('Error commad')
     }
 })
+

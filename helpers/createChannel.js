@@ -18,7 +18,8 @@ async function createChannels(interaction,gameName, userName, date, emoji, credi
             permissionOverwrites: [
               {
                   id: interaction.user.id,
-                  allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
+                  allow: [PermissionsBitField.Flags.ViewChannel],
+                  deny: [PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.CreateInstantInvite]
               },
               {
                   id: interaction.guild.id,

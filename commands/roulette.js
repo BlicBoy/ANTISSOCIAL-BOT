@@ -75,6 +75,7 @@ async function checkRoom(interaction) {
       const channel = interaction.guild.channels.cache.get(activity.channel);
       if (channel) {
         await interaction.reply({ content: `🎡 Check out this channel ${channel} to continue playing 🎡`, ephemeral: true })
+        await messageBet(channel, interaction)
         return true //User have activity dont create room
       } else {
         console.log('JOGADOR COM ATIVIDADE MAS SEM CANAL')
