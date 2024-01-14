@@ -14,9 +14,9 @@ async function messageBet(channel, interaction) {
 		.setColor(0x0099FF)
 		.setTitle('Roulette Game')
 		.setURL('https://github.com/BlicBoy/ANTISSOCIAL-BOT/tree/roulette')
-		.setAuthor({ name: 'Anti$$ocial', iconURL: 'https://i.imgur.com/cwYlwJp.jpg', url: 'https://github.com/BlicBoy/ANTISSOCIAL-BOT' })
+		.setAuthor({ name: 'Anti$ocial', iconURL: 'https://i.imgur.com/YQQvs4J.jpeg', url: 'https://github.com/BlicBoy/ANTISSOCIAL-BOT' })
 		.setDescription(`Place your bet ${interaction.user} the game of roulette is very simple you can bet on red, black and green or on the numbers.`)
-		.setThumbnail('https://i.imgur.com/cwYlwJp.jpg')
+		.setThumbnail('https://i.imgur.com/YQQvs4J.jpeg')
 		.addFields(
 			{ name: `You have ${info.credits} chips`, value: `\n` },
 		)
