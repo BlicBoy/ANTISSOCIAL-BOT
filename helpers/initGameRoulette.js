@@ -2,9 +2,11 @@ const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentTyp
 const { getCredits } = require('./credits')
 const { closeChannels } = require('./createChannel')
 const { deleteMessage } = require('./other')
-const { col } = require("sequelize")
 
 let optionBet = null
+
+var redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+var blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
 
 async function messageBet(channel, interaction) {
 
@@ -173,7 +175,20 @@ async function confirmBet(interaction) {
 		const retrycomponent = new ActionRowBuilder().addComponents(retry)
 		const rollcomponent = new ActionRowBuilder().addComponents(roll)
 
-		channel.send({content: `Confirm your bet! ${chips} chips on number ${yourNumber}`, components: [retrycomponent, rollcomponent]});
+		const reply = await channel.send({content: `Confirm your bet! ${chips} chips on number ${yourNumber}`, components: [retrycomponent, rollcomponent]});
+		const filter = (i) => i.user.id === interaction.user.id
+		const collector = reply.createMessageComponentCollector({
+			componentType: ComponentType.Button,
+			filter
+		})
+
+		collector.on('collect', async (interaction) => {
+			if(interaction.customId == 'confirm-button'){
+				console.log('BET CONFIRMED')
+			}else if(interaction.customId == 'retry-button'){
+				console.log('CANCEL BET')
+			}
+		})
 
 	}else{
 		var color = ''
@@ -206,6 +221,10 @@ async function confirmBet(interaction) {
 
 		channel.send({content: `Confirm your bet! ${chips} chips on ${color}`, components: [retrycomponent, rollcomponent]});
 	}
+	
+}
+
+async function game() {
 	
 }
 
