@@ -5,8 +5,10 @@ const { deleteMessage } = require('./other')
 
 let optionBet = null
 
-var redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
-var blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+const greenNumber = [0]
+const valueWinNumber = 35 
 
 async function messageBet(channel, interaction) {
 
@@ -156,11 +158,19 @@ async function confirmBet(interaction) {
 		await new Promise(resolve => setTimeout(resolve, 1000));
 		messageBet(channel, interaction)
 		return
-	}
+	} 
 
 	if(optionBet == 'number'){
 		var yourNumber = interaction.fields.getTextInputValue('number')
 		
+		if(yourNumber <= 0 || yourNumber > 35){
+			channel.send({content: `This number is not valid! Try again!`});
+			
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			messageBet(channel, interaction)
+			return
+		}
+
 
 		const retry = new ButtonBuilder()
 		.setLabel('Retry - 🔁')
@@ -184,9 +194,23 @@ async function confirmBet(interaction) {
 
 		collector.on('collect', async (interaction) => {
 			if(interaction.customId == 'confirm-button'){
-				console.log('BET CONFIRMED')
+				await interaction.reply({ content: `🎰 Bet confirmed 🎰`, ephemeral: false})
+				await RollWhell(channel)
+				await new Promise(resolve => setTimeout(resolve, 3000));
+				var resultGame = await game()
+				await channel.send(`The number is ${resultGame.number}, colour ${resultGame.color}`)
+
+				if(5 == yourNumber){
+					let creditPlayer = chips * valueWinNumber
+					await MessagewinningBet(channel, creditPlayer)
+				}else{
+					await MessageLost(channel, chips)
+					await messageBet(channel, interaction)
+				}
 			}else if(interaction.customId == 'retry-button'){
 				console.log('CANCEL BET')
+				await deleteMessage(interaction)
+				messageBet(channel, interaction)
 			}
 		})
 
@@ -225,7 +249,33 @@ async function confirmBet(interaction) {
 }
 
 async function game() {
-	
+	const result = Math.floor(Math.random() * 37) // generate number 0 to 36
+
+	let resultColor = '';
+	if (redNumbers.includes(result)) {
+		 resultColor = 'red';
+	} else if (blackNumbers.includes(result)) {
+		 resultColor = 'black';
+	} else {
+		 resultColor = 'green';
+	}
+
+	return{
+		number: result,
+		color: resultColor
+	}
+}
+
+async function MessagewinningBet(channel, credits) {
+	await channel.send(`💵 You get ${credits} credits! 💵`)
+}
+async function MessageLost(channel, credits){
+	await channel.send(`😥 You lost ${credits} credits! 😥`)
+}
+
+async function RollWhell(channel) {
+	await channel.send(`Rolling...`)
+	await channel.send(`https://i.makeagif.com/media/11-22-2017/gXYMAo.gif`)
 }
 
 exports.messageBet = messageBet
