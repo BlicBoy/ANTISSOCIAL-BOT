@@ -68,17 +68,14 @@ async function checkRoom(interaction) {
   try {
     let activity = await checktActivity(interaction, 'roullete')
     if (activity == null) {
-      console.log('JOGADOR SEM ATIVIDADE')
       return false //Dont have room
     } else {
-      console.log('JOGADOR COM ATIVIDADE')
       const channel = interaction.guild.channels.cache.get(activity.channel);
       if (channel) {
         await interaction.reply({ content: `🎡 Check out this channel ${channel} to continue playing 🎡`, ephemeral: true })
         await messageBet(channel, interaction)
         return true //User have activity dont create room
       } else {
-        console.log('JOGADOR COM ATIVIDADE MAS SEM CANAL')
         await closeChannels(0, 'Force Close - ' + dateFormater(), 'roullete',activity.id_player)
         return false //Room have problem create another
       }
