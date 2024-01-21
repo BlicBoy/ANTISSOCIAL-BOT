@@ -64,7 +64,7 @@ let status = [
         url: 'https://www.youtube.com/watch?v=ZcmgI-R-9W0&ab_channel=FiltrPortugal',
     },
   ];
-client.once(Events.ClientReady, readyClient => {
+client.once(Events.ClientReady, async readyClient => {
     UserCredits.sync()
     GameResumes.sync()
     console.log(`✅ ${readyClient.user.tag} is online.`);

@@ -1,7 +1,8 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, ModalBuilder, TextInputBuilder, TextInputStyle, InteractionType } = require("discord.js")
-const { getCredits } = require('./credits')
+const { getCredits, giveCreditsWin, removeChipsBet } = require('./credits')
 const { closeChannels } = require('./createChannel')
 const { deleteMessage } = require('./other')
+
 
 let optionBet = null
 
@@ -26,7 +27,7 @@ async function messageBet(channel, interaction) {
 		)
 		.setImage('https://i.makeagif.com/media/11-22-2017/gXYMAo.gif')
 		.setTimestamp()
-		.setFooter({ text: 'Anti$$ocial - BOT', iconURL: 'https://i.imgur.com/cwYlwJp.jpg' });
+		.setFooter({ text: 'Anti$$ocial - BOT', iconURL: 'https://i.imgur.com/YQQvs4J.jpeg' });
 
 	const closeGame = new ButtonBuilder()
 		.setLabel('Close Game')
@@ -170,8 +171,7 @@ async function confirmBet(interaction) {
 			messageBet(channel, interaction)
 			return
 		}
-
-
+	}
 		const retry = new ButtonBuilder()
 		.setLabel('Retry - 🔁')
 		.setStyle(ButtonStyle.Danger)
@@ -185,7 +185,8 @@ async function confirmBet(interaction) {
 		const retrycomponent = new ActionRowBuilder().addComponents(retry)
 		const rollcomponent = new ActionRowBuilder().addComponents(roll)
 
-		const reply = await channel.send({content: `Confirm your bet! ${chips} chips on number ${yourNumber}`, components: [retrycomponent, rollcomponent]});
+		const reply = optionBet == 'number' ?  await channel.send({content: `Confirm your bet! ${chips} chips on number ${yourNumber}`, components: [retrycomponent, rollcomponent]}) 
+		: await channel.send({content: `Confirm your bet! ${chips} chips on color ${optionBet}`, components: [retrycomponent, rollcomponent]});
 		const filter = (i) => i.user.id === interaction.user.id
 		const collector = reply.createMessageComponentCollector({
 			componentType: ComponentType.Button,
@@ -195,17 +196,33 @@ async function confirmBet(interaction) {
 		collector.on('collect', async (interaction) => {
 			if(interaction.customId == 'confirm-button'){
 				await interaction.reply({ content: `🎰 Bet confirmed 🎰`, ephemeral: false})
+				await removeChipsBet(interaction, chips)
 				await RollWhell(channel)
 				await new Promise(resolve => setTimeout(resolve, 3000));
 				var resultGame = await game()
-				await channel.send(`The number is ${resultGame.number}, colour ${resultGame.color}`)
+				await channel.send(`The number is ${resultGame.number}, color ${resultGame.color}`)
 
-				if(5 == yourNumber){
-					let creditPlayer = chips * valueWinNumber
+				if(resultGame.number == yourNumber || resultGame.color == optionBet){
+					var creditPlayer = 0
+					if(optionBet == 'number'){
+						creditPlayer = chips * valueWinNumber
+					}else if(optionBet == 'green'){
+						creditPlayer = chips * 14
+					}else{
+						creditPlayer = chips * 2
+					}
+			
+					await giveCreditsWin(interaction, creditPlayer)
 					await MessagewinningBet(channel, creditPlayer)
+					await messageBet(channel, interaction)
 				}else{
 					await MessageLost(channel, chips)
-					await messageBet(channel, interaction)
+					let info = await getCredits(interaction.user.id)
+					if(info.credits == 0){
+						await channel.send(`⚠️ You don't have chips ⚠️`)
+					}else{
+						await messageBet(channel, interaction)
+					}
 				}
 			}else if(interaction.customId == 'retry-button'){
 				console.log('CANCEL BET')
@@ -213,38 +230,7 @@ async function confirmBet(interaction) {
 				messageBet(channel, interaction)
 			}
 		})
-
-	}else{
-		var color = ''
-
-		switch (optionBet) {
-				case 'red':
-					color = 'RED - 🔴'
-				break;
-				case 'black':
-					color = 'BLACK - ⚫'
-				break;
-				case 'green':
-					color = 'GREEN - 🟢'
-				break;
-		}
-		
-
-		const retry = new ButtonBuilder()
-		.setLabel('Retry - 🔁')
-		.setStyle(ButtonStyle.Danger)
-		.setCustomId('retry-button')
-
-		const roll = new ButtonBuilder()
-			.setLabel('YES - 🎰')
-			.setStyle(ButtonStyle.Primary)
-			.setCustomId('confirm-button')
-
-		const retrycomponent = new ActionRowBuilder().addComponents(retry)
-		const rollcomponent = new ActionRowBuilder().addComponents(roll)
-
-		channel.send({content: `Confirm your bet! ${chips} chips on ${color}`, components: [retrycomponent, rollcomponent]});
-	}
+	
 	
 }
 

@@ -27,7 +27,7 @@ async function createChannels(interaction,gameName, userName, date, emoji, credi
               },
           ],
           });
-        await openActivityGame(channel,interaction,credits,dateFormater(),gameName)
+        await openActivityGame(channel,interaction,credits,dateFormater(),gameName,interaction.guild.id)
         return channel
 
       } catch (error) {

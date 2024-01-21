@@ -21,7 +21,7 @@ function dateFormater() {
  * Save information game in database
  *  
  */
-async function openActivityGame(channel, interaction, credits, initDate, game){
+async function openActivityGame(channel, interaction, credits, initDate, game, guildId){
     try {
         let result = GameResumes.create({
                 id_player: interaction.user.id,
@@ -31,7 +31,8 @@ async function openActivityGame(channel, interaction, credits, initDate, game){
                 init_date: initDate,
                 finish_date: null,
                 channel: channel.id,
-                reason_close: null
+                reason_close: null,
+                guildId: guildId
             }) 
         if(result){
             return true

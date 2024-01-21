@@ -32,6 +32,10 @@ const GameResumes = sequelize.define('game-resumes',{
         type: Sequelize.STRING,
         allowNull: true
     },
+    guildId:{
+        type: Sequelize.STRING,
+        allowNull: true
+    },
     reason_close:{
         type: Sequelize.STRING,
         allowNull: true
