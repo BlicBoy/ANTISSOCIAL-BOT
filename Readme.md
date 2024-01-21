@@ -18,6 +18,7 @@ TOKEN = ********
 CLIENT_ID = *******
 GUILD_ID = ******
 AMBIENT = dev 
+DELETE_COMMANDS = false
 ```
 
 ## Update command list

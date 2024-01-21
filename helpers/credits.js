@@ -21,8 +21,9 @@ async function giveFirstCredits(interaction){
             const credits = await UserCredits.create({
                 id_player: interaction.user.id,
                 name: interaction.user.username,
-                credits: 100
+                credits: 100.0
             })
+            console.log('A dar as primeiras fichas ao ' + interaction.user.id)
             return credits
        }
        return null
@@ -35,7 +36,7 @@ async function giveCredits(interaction){
     try {
         let info = await getCredits(interaction.options.get('user').user.id)
         if(info){
-            const updatedCredits =  await UserCredits.update({ credits: (info.credits + interaction.options.get('chips').value) }, { where: { id_player: interaction.options.get('user').user.id } });
+            const updatedCredits =  await UserCredits.update({ credits: (parseFloat(info.credits) + parseFloat(interaction.options.get('chips').value)) }, { where: { id_player: interaction.options.get('user').user.id } });
             if(updatedCredits){
                 await interaction.reply({ content: `${interaction.options.get('user').user} received  ${interaction.options.get('chips').value} chips`, ephemeral: false})
             }else{
@@ -59,6 +60,50 @@ async function giveCredits(interaction){
     }
 }
 
+async function giveCreditsWin(interaction, chips){
+    try {
+        let info = await getCredits(interaction.user.id)
+        if(info){
+            let calculateChips = parseFloat(chips) + parseFloat(info.credits)
+            const updatedCredits =  await UserCredits.update({ credits: calculateChips }, { where: { id_player: interaction.user.id} });
+            console.log(updatedCredits)
+            if(updatedCredits){
+              console.log('Fichas atribuidas')
+
+            }else{
+              console.log('Não atribuiu fichas ao jogador')
+            }
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function removeChipsBet(interaction, chips) {
+    try {
+        let info = await getCredits(interaction.user.id);
+        if (info) {
+            let chipsToRemove = parseFloat(chips);
+            let currentCredits = parseFloat(info.credits);
+
+        
+            let calculateChips = currentCredits - chipsToRemove;
+            const updatedCredits = await UserCredits.update({ credits: calculateChips }, { where: { id_player: interaction.user.id} });
+            console.log(updatedCredits);
+            if (updatedCredits) {
+                console.log('Fichas removidas');
+            } else {
+                console.log('Não removeu fichas do jogador');
+            }
+            
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 exports.giveFirstCredits = giveFirstCredits
 exports.getCredits = getCredits
 exports.giveCredits = giveCredits
+exports.giveCreditsWin = giveCreditsWin
+exports.removeChipsBet = removeChipsBet

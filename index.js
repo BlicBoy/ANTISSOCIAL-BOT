@@ -9,6 +9,8 @@ const { TOKEN } = process.env
 
 //SQLITE - sequelize
 const UserCredits = require('./models/user-credits')
+const GameResumes = require('./models/game-resumes')
+
 
 //import commands
 const fs = require("node:fs")
@@ -25,6 +27,9 @@ for (const file of commandFiles) {
         console.log(`Esse comando em ${filePath} está com data ou execute ausentes.`)
     }
 }
+
+//othersImports
+const { confirmBet } = require('./helpers/initGameRoulette')
 
 //Login bot
 let status = [
@@ -59,8 +64,9 @@ let status = [
         url: 'https://www.youtube.com/watch?v=ZcmgI-R-9W0&ab_channel=FiltrPortugal',
     },
   ];
-client.once(Events.ClientReady, readyClient => {
+client.once(Events.ClientReady, async readyClient => {
     UserCredits.sync()
+    GameResumes.sync()
     console.log(`✅ ${readyClient.user.tag} is online.`);
     setInterval(() => {
         let random = Math.floor(Math.random() * status.length);
@@ -72,12 +78,20 @@ client.login(TOKEN);
 //listener interect
 client.on(Events.InteractionCreate, async interaction => {
     try {
+        if(interaction.isModalSubmit()){
+            await confirmBet(interaction)
+        }
+
         if (!interaction.isChatInputCommand()) return
         const command = interaction.client.commands.get(interaction.commandName)
         if (!command) return
         await command.execute(interaction)
+
+       
+
     } catch (error) {
         console.error(error)
         await interaction.reply('Error commad')
     }
 })
+
