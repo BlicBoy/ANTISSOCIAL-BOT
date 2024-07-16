@@ -69,7 +69,7 @@ async function messageBet(channel, interaction) {
 	collector.on('collect', async (interaction) => {
 		switch (interaction.customId) {
 			case 'close-button':
-				await closeChannels(interaction.channelId, 'Player close the game', 'roullete', interaction.user.id)
+				await closeChannels(interaction.channelId, 'Player close the game', 'roullete', interaction.user.id, interaction, '/roulette', info.credits)
 				const fetchedChannel = interaction.guild.channels.cache.get(interaction.channelId);
 				fetchedChannel.delete();
 				break;

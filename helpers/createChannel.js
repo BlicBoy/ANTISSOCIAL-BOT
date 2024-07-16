@@ -1,5 +1,5 @@
 const { ChannelType, PermissionsBitField  } = require("discord.js",);
-const { dateFormater, openActivityGame, checktActivity } = require("./other")
+const { dateFormater, openActivityGame, sendDM } = require("./other")
 const GameResumes = require("../models/game-resumes")
 
 
@@ -36,17 +36,16 @@ async function createChannels(interaction,gameName, userName, date, emoji, credi
       }
 }
 
-async function closeChannels(idroom, reason, gameName, id_player){
-  
+async function closeChannels(idroom, reason, gameName, id_player,interaction, game_command = null, credits = null) {
   try {
     if(idroom == 0){
       await GameResumes.update( { reason_close: reason, finish_date: dateFormater() }, { where: { id_player: id_player, game: gameName, reason_close: null} });
       console.log('Close Room Force')
     }else{
       await GameResumes.update({ reason_close: reason, finish_date: dateFormater() }, { where: { id_player: id_player, reason_close: null, channel: idroom, game: gameName}});
+      await sendDM(interaction, `🎡Thanks for playing! You can always play again just do ${game_command} in ${interaction.guild.name}! You currently have ${credits} credits.🎡`);
       console.log('Close Room Not force')
-    }
-   
+    }   
   } catch (error) {
     console.error('Error close channel '+ error)
   }

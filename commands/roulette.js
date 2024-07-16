@@ -76,12 +76,12 @@ async function checkRoom(interaction) {
         await messageBet(channel, interaction)
         return true //User have activity dont create room
       } else {
-        await closeChannels(0, 'Force Close - ' + dateFormater(), 'roullete',activity.id_player)
+        await closeChannels(0, 'Force Close - ' + dateFormater(), 'roullete',activity.id_player,interaction)
         return false //Room have problem create another
       }
     }
   } catch (error) {
-    await closeChannels(0, 'Force Close - ' + dateFormater(), 'roullete',activity.id_player)
+    await closeChannels(0, 'Force Close - ' + dateFormater(), 'roullete',activity.id_player,interaction)
     console.error('VERIFY ROOM: '+error)
     return false; //Room have problem create another
   }
