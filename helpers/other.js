@@ -64,8 +64,19 @@ async function deleteMessage(interaction){
 
 }
 
+async function sendDM(interaction, message){
+    try {
+        await interaction.user.send(message)
+        return true
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}
+
 
 exports.dateFormater = dateFormater
 exports.openActivityGame = openActivityGame
 exports.checktActivity = checktActivity
 exports.deleteMessage = deleteMessage
+exports.sendDM = sendDM
