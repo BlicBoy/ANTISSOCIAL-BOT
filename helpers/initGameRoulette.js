@@ -1,6 +1,6 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, ModalBuilder, TextInputBuilder, TextInputStyle, InteractionType } = require("discord.js")
 const { getCredits, giveCreditsWin, removeChipsBet } = require('./credits')
-const { closeChannels } = require('./createChannel')
+const { closeChannels, deleteChannel } = require('./createChannel')
 const { deleteMessage } = require('./other')
 
 
@@ -70,8 +70,7 @@ async function messageBet(channel, interaction) {
 		switch (interaction.customId) {
 			case 'close-button':
 				await closeChannels(interaction.channelId, 'Player close the game', 'roullete', interaction.user.id, interaction, '/roulette', info.credits)
-				const fetchedChannel = interaction.guild.channels.cache.get(interaction.channelId);
-				fetchedChannel.delete();
+				await deleteChannel(interaction);
 				break;
 			case 'red-button':
 				optionBet = 'red'
@@ -220,6 +219,10 @@ async function confirmBet(interaction) {
 					let info = await getCredits(interaction.user.id)
 					if(info.credits == 0){
 						await channel.send(`⚠️ You don't have chips ⚠️`)
+						await channel.send(`⚠️ Closing room in 5 seconds ⚠️`)
+						await new Promise(resolve => setTimeout(resolve, 5000));
+						await closeChannels(interaction.channelId, 'Player dont have chips', 'roullete', interaction.user.id, interaction, '/roulette', info.credits)
+						await deleteChannel(interaction);
 					}else{
 						await messageBet(channel, interaction)
 					}

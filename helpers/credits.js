@@ -1,3 +1,4 @@
+const GameResumes = require('../models/game-resumes')
 const UserCredits = require('../models/user-credits')
 
 async function getCredits(id_player) {
@@ -66,10 +67,10 @@ async function giveCreditsWin(interaction, chips){
         if(info){
             let calculateChips = parseFloat(chips) + parseFloat(info.credits)
             const updatedCredits =  await UserCredits.update({ credits: calculateChips }, { where: { id_player: interaction.user.id} });
-            console.log(updatedCredits)
+            
             if(updatedCredits){
               console.log('Fichas atribuidas')
-
+              await updateChipsInDBRoom(calculateChips, interaction);
             }else{
               console.log('Não atribuiu fichas ao jogador')
             }
@@ -88,18 +89,17 @@ async function removeChipsBet(interaction, chips) {
 
         
             let calculateChips = currentCredits - chipsToRemove;
-            const updatedCredits = await UserCredits.update({ credits: calculateChips }, { where: { id_player: interaction.user.id} });
-            console.log(updatedCredits);
-            if (updatedCredits) {
-                console.log('Fichas removidas');
-            } else {
-                console.log('Não removeu fichas do jogador');
-            }
+            await UserCredits.update({ credits: calculateChips }, { where: { id_player: interaction.user.id} });
+           await updateChipsInDBRoom(calculateChips, interaction);
             
         }
     } catch (error) {
         console.error(error);
     }
+}
+
+async function updateChipsInDBRoom(calculateChips, interaction) {
+    await GameResumes.update({ current_balance: calculateChips }, { where: { id_player: interaction.user.id, finish_date: null, reason_close: null } });
 }
 
 exports.giveFirstCredits = giveFirstCredits
