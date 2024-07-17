@@ -69,7 +69,7 @@ client.once(Events.ClientReady, async readyClient => {
     UserCredits.sync()
     GameResumes.sync()
     console.log(`✅ ${readyClient.user.tag} is online.`);
-    verifyOpenRooms(client)
+    await verifyOpenRooms(client)
     setInterval(() => {
         let random = Math.floor(Math.random() * status.length);
         client.user.setActivity(status[random]);
