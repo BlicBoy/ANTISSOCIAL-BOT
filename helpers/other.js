@@ -61,7 +61,6 @@ async function deleteMessage(interaction){
 	const amount = 10;
 	const messages = await channel.messages.fetch({ limit: amount + 1 });
 	await channel.bulkDelete(messages);
-
 }
 
 async function sendDM(interaction, message){
