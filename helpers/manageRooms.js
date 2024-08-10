@@ -17,7 +17,7 @@ async function verifyOpenRooms(client) {
                     if (!channelObj) {
                         await closeChannels(0, 'Channel not found', game, id_player, client, '/' + game, 0);
                     } else {
-                        console.log('Channel found');
+                        console.log('Channel found send message');
                         sendMessageToChannel(channelObj, game, id_player);
                     }
                 } else {
