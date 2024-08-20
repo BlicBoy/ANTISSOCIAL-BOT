@@ -1,7 +1,6 @@
 const { ChannelType, PermissionsBitField  } = require("discord.js",);
 const { dateFormater, openActivityGame, sendDM } = require("./other")
 const GameResumes = require("../models/game-resumes");
-const { getCredits } = require("./credits");
 const { log } = require("../utils/winston");
 
 
