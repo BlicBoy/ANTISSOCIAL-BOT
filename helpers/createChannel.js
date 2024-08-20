@@ -12,7 +12,7 @@ const { getCredits } = require("./credits");
  */
 async function createChannels(interaction,gameName, userName, date, emoji, credits) {
     try {
-        var name =  emoji + gameName + '-' + userName + '-' + date
+        var name =  emoji + gameName
         var channel = await interaction.guild.channels.create({
             name: name, 
             type: ChannelType.GuildText, 
@@ -57,8 +57,4 @@ async function deleteChannel(interaction) {
 	fetchedChannel.delete(); 
 }
 
-
-exports.createChannels = createChannels;
-exports.closeChannels = closeChannels;
-exports.deleteChannel = deleteChannel;
-
+module.exports = { createChannels, closeChannels, deleteChannel }

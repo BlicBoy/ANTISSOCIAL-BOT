@@ -33,4 +33,4 @@ async function verifyOpenRooms(client) {
     }
 }
 
-exports.verifyOpenRooms = verifyOpenRooms
+module.exports = { verifyOpenRooms }

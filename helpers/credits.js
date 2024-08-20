@@ -102,8 +102,4 @@ async function updateChipsInDBRoom(calculateChips, interaction) {
     await GameResumes.update({ current_balance: calculateChips }, { where: { id_player: interaction.user.id, finish_date: null, reason_close: null } });
 }
 
-exports.giveFirstCredits = giveFirstCredits
-exports.getCredits = getCredits
-exports.giveCredits = giveCredits
-exports.giveCreditsWin = giveCreditsWin
-exports.removeChipsBet = removeChipsBet
+module.exports = { giveFirstCredits, getCredits, giveCredits, giveCreditsWin, removeChipsBet }
