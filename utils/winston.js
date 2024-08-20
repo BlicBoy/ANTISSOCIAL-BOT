@@ -1,8 +1,11 @@
 const { createLogger, format, transports } = require('winston');
+const { Logtail } = require("@logtail/node");
+const { LogtailTransport } = require("@logtail/winston");
 const { combine, timestamp, label, prettyPrint } = format;
 const dotenv = require('dotenv');
 dotenv.config();
-const { AMBIENT } = process.env;
+const { AMBIENT , BETTER_STACK_TOKEN } = process.env;
+const logtail = new Logtail(BETTER_STACK_TOKEN);
 
 const log = AMBIENT == 'prod' ?  createLogger({
     level: 'info',
@@ -15,6 +18,7 @@ const log = AMBIENT == 'prod' ?  createLogger({
         new transports.Console(),
         new transports.File({ filename: 'error.log', level: 'error' }),
         new transports.File({ filename: 'app.log' }),
+        new LogtailTransport(logtail)
     ],
   }) : createLogger({
     level: 'info',

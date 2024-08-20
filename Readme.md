@@ -35,6 +35,23 @@ npm i sequelize sqlite3
 ```
 
 ## Create Logs File
+
 ```bash
 npm i winston
 ```
+For the bot logs in production we use an external service called betterstack. If you want to use it, you'll need to create a betterstack account and configure your .env as follows
+
+```bash
+npm i @logtail/winston @logtail/node
+```
+
+```dotenv
+TOKEN = ********
+CLIENT_ID = *******
+GUILD_ID = ******
+AMBIENT = dev 
+DELETE_COMMANDS = false
+BETTER_STACK_TOKEN = ******
+```
+
+If you don't want to use it, you have to comment out or delete 2 lines from the winston.js file, which are line 8 and 21.
