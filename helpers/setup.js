@@ -3,6 +3,7 @@ const UserCredits = require('../models/user-credits')
 const GameResumes = require('../models/game-resumes')
 const { verifyOpenRooms } = require('./manageRooms');
 const { log } = require('../utils/winston');
+const { confirmBet } = require('./initGameRoulette');
 
 //Login bot
 let status = [
@@ -49,4 +50,22 @@ async function setupBot(client, readyClient) {
       }, 10000);
 }
 
-module.exports = { setupBot }
+async function manageModals(interaction) {
+    try {
+        if (interaction.isModalSubmit() && interaction.fields.getTextInputValue('chips') != null) {
+            await confirmBet(interaction)
+        }
+        // else { for future
+        //     console.log(interaction)
+        // }
+        if (!interaction.isChatInputCommand()) return
+        const command = interaction.client.commands.get(interaction.commandName)
+        if (!command) return
+        await command.execute(interaction)
+    } catch (error) {
+        log.error(error)
+        await interaction.reply('Error commad')
+    }
+}
+
+module.exports = { setupBot , manageModals }

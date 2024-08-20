@@ -55,3 +55,29 @@ BETTER_STACK_TOKEN = ******
 ```
 
 If you don't want to use it, you have to comment out or delete 2 lines from the winston.js file, which are line 8 and 21.
+
+## Updates 20/08/2024
+You can now make changes while the bot is always running without having to stop it.
+Just run the command: 
+
+```bash
+npm run dev
+```
+
+or
+
+```bash
+npm run watch
+```
+
+To install all the project's dependencies you need to have the package.json and run the command: 
+
+```bash
+npm i
+```
+or 
+
+```bash
+npm install
+```
+
