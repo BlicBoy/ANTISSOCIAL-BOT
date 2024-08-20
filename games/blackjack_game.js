@@ -1,7 +1,7 @@
 const { createChannels, closeChannels, deleteChannel } = require("../helpers/createChannel");
 const { giveFirstCredits, getCredits } = require("../helpers/credits");
 const { checkRoom } = require("../helpers/manageRooms");
-const { dateFormater } = require("../helpers/other");
+const { dateFormater, deleteMessage } = require("../helpers/other");
 const { log } = require("../utils/winston");
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require("discord.js")
 
@@ -94,6 +94,7 @@ async function initGame(interaction) {
 }
 
 async function messageBet(channel, interaction, credits) {
+    await generateDeck();
     const triggers = await createMessage(channel, interaction, credits);
     const filter = (i) => i.user.id === interaction.user.id
 	const collector = triggers.createMessageComponentCollector({
@@ -108,10 +109,10 @@ async function messageBet(channel, interaction, credits) {
 				await deleteChannel(interaction);
 				break;
 			case 'play-button':
-				console.log('play')
+				await playGame(channel, interaction)
 				break;
 		}
-	})
+	});
 }
 
 
@@ -144,6 +145,16 @@ async function createMessage(channel, interaction, credits) {
     return await channel.send({ embeds: [messageBet], components: [buttonRow] })
 }
 
+
+async function playGame(channel, interaction) {
+    await deleteMessage(interaction);
+    drawCard(deck, playerHand)
+    drawCard(deck, dealerHand);
+    drawCard(deck, playerHand);
+    drawCard(deck, dealerHand);
+
+    channel.send({content: `**Your hand:**\n${playerHand.map(drawAsciiCard).join('\t')}\n**Dealer's hand:**\n${drawAsciiCard(dealerHand[0])}\n\nType \`!hit\` to draw a card or \`!stand\` to hold your hand.`});
+}
 
 
 module.exports = { initGame }
