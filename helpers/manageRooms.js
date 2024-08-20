@@ -1,7 +1,6 @@
 const GameResumes = require('../models/game-resumes')
 const { closeChannels } = require('./createChannel');
-const { getCredits } = require('./credits');
-const {createMessage} = require('./initGameRoulette')
+const { sendDMBot } = require('./other');
 
 async function verifyOpenRooms(client) {
     try {
@@ -17,8 +16,10 @@ async function verifyOpenRooms(client) {
                     if (!channelObj) {
                         await closeChannels(0, 'Channel not found', game, id_player, client, '/' + game, 0);
                     } else {
-                        console.log('Channel found send message');
-                        sendMessageToChannel(channelObj, game, id_player);
+                        console.log('Channel found delete channel');
+                        await closeChannels(0, 'Channel found and deleted', game, id_player, client, '/' + game, 0);
+                        channelObj.delete();
+                        await sendDMBot(client, id_player, `🎡Your session has been closed! You can always play again just do /${game} in ${guild.name}!🎡`);
                     }
                 } else {
                     console.log(`Guild not found for guildId: ${guildId}`);
@@ -29,19 +30,6 @@ async function verifyOpenRooms(client) {
         }
     } catch (error) {
         console.error('Error verifying open rooms:', error);
-    }
-}
-
-async function sendMessageToChannel (channel, game, id_player) {
-    try {
-        let data = await getCredits(id_player);
-        switch (game) {
-            case 'roullete':
-                await createMessage(channel, data.name, data.credits);
-                break;
-        }
-    } catch (error) {
-        console.error('Error sending message to channel:', error);
     }
 }
 
