@@ -87,10 +87,4 @@ async function sendDMBot(client, userId, message){
     
 }
 
-
-exports.dateFormater = dateFormater
-exports.openActivityGame = openActivityGame
-exports.checktActivity = checktActivity
-exports.deleteMessage = deleteMessage
-exports.sendDM = sendDM
-exports.sendDMBot = sendDMBot
+module.exports = { dateFormater, openActivityGame, checktActivity, deleteMessage, sendDM, sendDMBot }

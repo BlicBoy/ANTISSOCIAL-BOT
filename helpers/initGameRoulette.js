@@ -271,6 +271,4 @@ async function RollWhell(channel) {
 	await channel.send(`https://i.makeagif.com/media/11-22-2017/gXYMAo.gif`)
 }
 
-exports.messageBet = messageBet
-exports.confirmBet = confirmBet
-exports.createMessage = createMessage
+module.exports = { messageBet, confirmBet, createMessage }
