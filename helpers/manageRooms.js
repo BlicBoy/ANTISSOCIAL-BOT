@@ -1,4 +1,5 @@
-const GameResumes = require('../models/game-resumes')
+const GameResumes = require('../models/game-resumes');
+const { log } = require('../utils/winston');
 const { closeChannels } = require('./createChannel');
 const { sendDMBot } = require('./other');
 
@@ -16,20 +17,20 @@ async function verifyOpenRooms(client) {
                     if (!channelObj) {
                         await closeChannels(0, 'Channel not found', game, id_player, client, '/' + game, 0);
                     } else {
-                        console.log('Channel found delete channel');
+                        log.info('Channel found delete channel');
                         await closeChannels(0, 'Channel found and deleted', game, id_player, client, '/' + game, 0);
                         channelObj.delete();
                         await sendDMBot(client, id_player, `🎡Your session has been closed! You can always play again just do /${game} in ${guild.name}!🎡`);
                     }
                 } else {
-                    console.log(`Guild not found for guildId: ${guildId}`);
+                    log.info(`Guild not found for guildId: ${guildId}`);
                 }
             });
         } else {
-            console.log('Data is not an array');
+            log.info('Data is not an array');
         }
     } catch (error) {
-        console.error('Error verifying open rooms:', error);
+        log.error('Error verifying open rooms:', error);
     }
 }
 

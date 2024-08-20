@@ -1,5 +1,6 @@
 const GameResumes = require('../models/game-resumes')
 const UserCredits = require('../models/user-credits')
+const { log } = require('../utils/winston')
 
 async function getCredits(id_player) {
     try {
@@ -11,7 +12,7 @@ async function getCredits(id_player) {
         return null
         
     } catch (error) {
-        console.error(error)
+        log.error(error)
     }
 }
 
@@ -24,12 +25,12 @@ async function giveFirstCredits(interaction){
                 name: interaction.user.username,
                 credits: 100.0
             })
-            console.log('A dar as primeiras fichas ao ' + interaction.user.id)
+            log.info('A dar as primeiras fichas ao ' + interaction.user.id)
             return credits
        }
        return null
     } catch (error) {
-        console.error(error)      
+        log.error(error)      
     }
 }
 
@@ -57,7 +58,7 @@ async function giveCredits(interaction){
             }
         }
     } catch (error) {
-        console.error(error)
+        log.error(error)
     }
 }
 
@@ -69,14 +70,14 @@ async function giveCreditsWin(interaction, chips){
             const updatedCredits =  await UserCredits.update({ credits: calculateChips }, { where: { id_player: interaction.user.id} });
             
             if(updatedCredits){
-              console.log('Fichas atribuidas')
+              log.info('Fichas atribuidas ao jogador ' + interaction.user.id)
               await updateChipsInDBRoom(calculateChips, interaction);
             }else{
-              console.log('Não atribuiu fichas ao jogador')
+                log.error('Não atribuiu fichas ao jogador ' + interaction.user.id)
             }
         }
     } catch (error) {
-        console.error(error)
+        log.error(error)
     }
 }
 
@@ -94,7 +95,7 @@ async function removeChipsBet(interaction, chips) {
             
         }
     } catch (error) {
-        console.error(error);
+        log.error(error);
     }
 }
 

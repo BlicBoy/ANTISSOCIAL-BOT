@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js")
 const { getCredits } = require ("../helpers/credits")
+const { log } = require("../utils/winston")
 
 module.exports = {
   data:  new SlashCommandBuilder()
@@ -15,7 +16,7 @@ module.exports = {
       }
       
     } catch (error) {
-        console.error(error)
+        log.error(error)
     }
       
   }

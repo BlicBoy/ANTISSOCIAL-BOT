@@ -5,3 +5,5 @@ package.json
 /models/tags.js
 database.sqlite
 ./commands/ping.js
+error.log
+app.log

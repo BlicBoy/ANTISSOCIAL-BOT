@@ -1,7 +1,8 @@
 const { ActivityType } = require('discord.js')
 const UserCredits = require('../models/user-credits')
 const GameResumes = require('../models/game-resumes')
-const { verifyOpenRooms } = require('./manageRooms')
+const { verifyOpenRooms } = require('./manageRooms');
+const { log } = require('../utils/winston');
 
 //Login bot
 let status = [
@@ -40,7 +41,7 @@ let status = [
 async function setupBot(client, readyClient) {
     UserCredits.sync()
     GameResumes.sync()
-    console.log(`✅ ${readyClient.user.tag} is online.`);
+    log.info(`✅ ${readyClient.user.tag} is online.`);
     await verifyOpenRooms(client)
     setInterval(() => {
         let random = Math.floor(Math.random() * status.length);

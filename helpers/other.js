@@ -1,4 +1,5 @@
-const GameResumes = require('../models/game-resumes')
+const GameResumes = require('../models/game-resumes');
+const { log } = require('../utils/winston');
 
 /**
  * Date formater
@@ -40,7 +41,7 @@ async function openActivityGame(channel, interaction, credits, initDate, game, g
             return false
         }
     } catch (error) {
-        console.error(error)
+        log.error(error)
         return false
     }
    
@@ -52,7 +53,7 @@ async function checktActivity(interaction, nameGame) {
        if(result) return result
        return null
     } catch (error) {
-        console.error(error)
+        log.error(error)
         return error
     }
 }
@@ -68,7 +69,7 @@ async function sendDM(interaction, message){
         await interaction.user.send(message)
         return true
     } catch (error) {
-        console.error(error)
+        log.error(error)
         return false
     }
 }
@@ -78,10 +79,10 @@ async function sendDMBot(client, userId, message){
         const user = await client.users.fetch(userId).catch(() => null);
         if (!user) console.log('User not found');
         await user.send(message).catch(() => {
-           console.log("User has DMs closed or has no mutual servers with the bot :(");
+           log.info("User has DMs closed or has no mutual servers with the bot :(");
         });
     } catch (error) {
-        console.error(error)
+        log.error(error)
         return false
     }
     

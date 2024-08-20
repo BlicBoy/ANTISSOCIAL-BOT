@@ -9,6 +9,7 @@ const { createChannels, closeChannels } = require("../helpers/createChannel")
 const { dateFormater, checktActivity } = require("../helpers/other")
 const { giveFirstCredits, getCredits } = require("../helpers/credits")
 const { messageBet } = require("../helpers/initGameRoulette")
+const { log } = require("../utils/winston")
 
 var timeout = []
 
@@ -19,7 +20,7 @@ module.exports = {
     .setDMPermission(false),
   async execute(interaction) {
     if (timeout.includes(interaction.user.id)) {
-      console.log(`User ${interaction.user.username} está a spammar o bot`)
+      log.info(`User ${interaction.user.username} está a spammar o bot`)
       await interaction.reply({ content: ' 🛑 You are on cooldown, try again in 1 minute 🛑', ephemeral: true })
       return
     }
@@ -55,7 +56,7 @@ async function initGame(interaction) {
       }
     }
   } catch (error) {
-    console.error('CREATE ROOM: '+ error)
+    log.error('CREATE ROOM: '+ error)
   }
 
 }
@@ -83,7 +84,7 @@ async function checkRoom(interaction) {
     }
   } catch (error) {
     await closeChannels(0, 'ERROR TO VERIFY ROOM', 'roullete',activity.id_player,interaction, '/roulette', null)
-    console.error('VERIFY ROOM: '+error)
+    log.error('VERIFY ROOM: '+error)
     return false; //Room have problem create another
   }
 
