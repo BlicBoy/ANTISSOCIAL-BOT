@@ -61,7 +61,6 @@ async function deleteMessage(interaction){
 	const amount = 10;
 	const messages = await channel.messages.fetch({ limit: amount + 1 });
 	await channel.bulkDelete(messages);
-
 }
 
 async function sendDM(interaction, message){
@@ -74,9 +73,24 @@ async function sendDM(interaction, message){
     }
 }
 
+async function sendDMBot(client, userId, message){
+    try {
+        const user = await client.users.fetch(userId).catch(() => null);
+        if (!user) console.log('User not found');
+        await user.send(message).catch(() => {
+           console.log("User has DMs closed or has no mutual servers with the bot :(");
+        });
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+    
+}
+
 
 exports.dateFormater = dateFormater
 exports.openActivityGame = openActivityGame
 exports.checktActivity = checktActivity
 exports.deleteMessage = deleteMessage
 exports.sendDM = sendDM
+exports.sendDMBot = sendDMBot

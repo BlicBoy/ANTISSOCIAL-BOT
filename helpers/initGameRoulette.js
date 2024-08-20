@@ -11,19 +11,16 @@ const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31
 const greenNumber = [0]
 const valueWinNumber = 35 
 
-async function messageBet(channel, interaction) {
-
-	let info = await getCredits(interaction.user.id)
-
-	const messageBet = new EmbedBuilder()
+async function createMessage(channel, name_user, credits) {
+		const messageBet = new EmbedBuilder()
 		.setColor(0x0099FF)
 		.setTitle('Roulette Game')
 		.setURL('https://github.com/BlicBoy/ANTISSOCIAL-BOT/tree/roulette')
 		.setAuthor({ name: 'Anti$ocial', iconURL: 'https://i.imgur.com/YQQvs4J.jpeg', url: 'https://github.com/BlicBoy/ANTISSOCIAL-BOT' })
-		.setDescription(`Place your bet ${interaction.user} the game of roulette is very simple you can bet on red, black and green or on the numbers.`)
+		.setDescription(`Place your bet @${name_user} the game of roulette is very simple you can bet on red, black and green or on the numbers.`)
 		.setThumbnail('https://i.imgur.com/YQQvs4J.jpeg')
 		.addFields(
-			{ name: `You have ${info.credits} chips`, value: `\n` },
+			{ name: `You have ${credits} chips`, value: `\n` },
 		)
 		.setImage('https://i.makeagif.com/media/11-22-2017/gXYMAo.gif')
 		.setTimestamp()
@@ -57,7 +54,14 @@ async function messageBet(channel, interaction) {
 
 	const buttonRow = new ActionRowBuilder().addComponents(red, black, green, number, closeGame)
 
-	const reply = await channel.send({ embeds: [messageBet], components: [buttonRow] })
+	return await channel.send({ embeds: [messageBet], components: [buttonRow] })
+}
+
+async function messageBet(channel, interaction) {
+
+	let info = await getCredits(interaction.user.id)
+
+	const reply = await createMessage(channel, interaction.user.username, info.credits);
 
 	const filter = (i) => i.user.id === interaction.user.id
 
@@ -269,3 +273,4 @@ async function RollWhell(channel) {
 
 exports.messageBet = messageBet
 exports.confirmBet = confirmBet
+exports.createMessage = createMessage
