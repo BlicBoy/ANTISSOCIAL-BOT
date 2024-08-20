@@ -25,7 +25,8 @@ for (const file of commandFiles) {
 
 //import helpers
 const { confirmBet } = require('./helpers/initGameRoulette')
-const { setupBot } = require('./helpers/setup')
+const { setupBot, manageModals } = require('./helpers/setup');
+const { log } = require('./utils/winston');
 
 //listener ready
 client.once(Events.ClientReady, async readyClient => {
@@ -37,17 +38,6 @@ client.login(TOKEN);
 
 //listener interect
 client.on(Events.InteractionCreate, async interaction => {
-    try {
-        if(interaction.isModalSubmit()){
-            await confirmBet(interaction)
-        }
-        if (!interaction.isChatInputCommand()) return
-        const command = interaction.client.commands.get(interaction.commandName)
-        if (!command) return
-        await command.execute(interaction)
-    } catch (error) {
-        console.error(error)
-        await interaction.reply('Error commad')
-    }
+    await manageModals(interaction);
 })
 
