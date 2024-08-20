@@ -63,7 +63,7 @@ async function manageModals(interaction) {
         if (!command) return
         await command.execute(interaction)
     } catch (error) {
-        console.error(error)
+        log.error(error)
         await interaction.reply('Error commad')
     }
 }
