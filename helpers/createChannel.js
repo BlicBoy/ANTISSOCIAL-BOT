@@ -2,6 +2,7 @@ const { ChannelType, PermissionsBitField  } = require("discord.js",);
 const { dateFormater, openActivityGame, sendDM } = require("./other")
 const GameResumes = require("../models/game-resumes");
 const { getCredits } = require("./credits");
+const { log } = require("../utils/winston");
 
 
 /**
@@ -32,7 +33,7 @@ async function createChannels(interaction,gameName, userName, date, emoji, credi
         return channel
 
       } catch (error) {
-        console.log(error);
+        log.error(error);
         return
       }
 }
@@ -41,14 +42,14 @@ async function closeChannels(idroom, reason, gameName, id_player,interaction, ga
   try {
     if(idroom == 0){
       await GameResumes.update( { reason_close: reason, finish_date: dateFormater(), current_balance: credits }, { where: { id_player: id_player, game: gameName, reason_close: null} });
-      console.log('Close Room Force');
+      log.info('Close Room Force id_player ' + id_player);
     }else{
       await GameResumes.update({ reason_close: reason, finish_date: dateFormater(), current_balance: credits }, { where: { id_player: id_player, reason_close: null, channel: idroom, game: gameName}});
       await sendDM(interaction, `🎡Thanks for playing! You can always play again just do ${game_command} in ${interaction.guild.name}! You currently have ${credits} credits.🎡`);
-      console.log('Close Room Not force');
+      log.info('Close Room Not force');
     }  
   } catch (error) {
-    console.error('Error close channel '+ error);
+    log.error('Error close channel '+ error);
   } 
 }
 

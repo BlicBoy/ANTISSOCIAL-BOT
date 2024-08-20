@@ -1,7 +1,8 @@
 /node_modules
 .env
 package-lock.json
-package.json
 /models/tags.js
 database.sqlite
 ./commands/ping.js
+error.log
+app.log

@@ -58,13 +58,9 @@ async function createMessage(channel, name_user, credits) {
 }
 
 async function messageBet(channel, interaction) {
-
 	let info = await getCredits(interaction.user.id)
-
 	const reply = await createMessage(channel, interaction.user.username, info.credits);
-
 	const filter = (i) => i.user.id === interaction.user.id
-
 	const collector = reply.createMessageComponentCollector({
 		componentType: ComponentType.Button,
 		filter
@@ -92,7 +88,6 @@ async function messageBet(channel, interaction) {
 					optionBet = 'green'
 					await BetInOption('GREEN - 🟢',interaction)
 					break;
-
 			default:
 				break;
 		}
@@ -103,7 +98,6 @@ async function BetInOption(option, interaction) {
 	const modal = new ModalBuilder()
 		.setCustomId(`${interaction.user.id}_roulette`)
 		.setTitle(option);
-
 	if (optionBet == 'number') {
 		const chips = new TextInputBuilder()
 		.setCustomId('chips')
@@ -143,22 +137,15 @@ async function BetInOption(option, interaction) {
 
 async function confirmBet(interaction) {
 	const channel = interaction.guild.channels.cache.get(interaction.channelId)
-
 	await deleteMessage(interaction)
-
 	await new Promise(resolve => setTimeout(resolve, 1000));
-
 	var chips = interaction.fields.getTextInputValue('chips')
 	interaction.reply({content: `Confirming your bet...`});
-	
 	await new Promise(resolve => setTimeout(resolve, 1000));
-
 	var info = await getCredits(interaction.user.id)
-
 	if(info.credits < chips){
 		channel.send({content: `You don't have credits for that bet! Try again!`});
 		channel.send({content: `You only have ${info.credits} credits. Your bet was ${chips} credits.`});
-		
 		await new Promise(resolve => setTimeout(resolve, 1000));
 		messageBet(channel, interaction)
 		return
@@ -166,10 +153,8 @@ async function confirmBet(interaction) {
 
 	if(optionBet == 'number'){
 		var yourNumber = interaction.fields.getTextInputValue('number')
-		
 		if(yourNumber <= 0 || yourNumber > 35){
 			channel.send({content: `This number is not valid! Try again!`});
-			
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			messageBet(channel, interaction)
 			return
