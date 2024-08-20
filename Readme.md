@@ -33,3 +33,8 @@ node .\deploy-commands.js
 ```bash
 npm i sequelize sqlite3
 ```
+
+## Create Logs File
+```bash
+npm i winston
+```
