@@ -4,7 +4,7 @@ const { checkRoom } = require("../../helpers/manageRooms");
 const { dateFormater, deleteMessage } = require("../../helpers/other");
 const { log } = require("../../utils/winston");
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require("discord.js")
-const {deck, generateDeck, calculateHand, drawCard, drawAsciiCard} = require('./cards')
+const {deck, generateDeck, calculateHand, drawCard, drawAsciiCard, drawImageCard} = require('./cards')
 
 let playerHand = [];
 let dealerHand = [];
@@ -100,7 +100,15 @@ async function playGame(channel, interaction) {
     drawCard(deck, playerHand);
     drawCard(deck, dealerHand);
 
-    channel.send({content: `**Your hand:**\n${playerHand.map(drawAsciiCard).join('\t')}\n**Dealer's hand:**\n${drawAsciiCard(dealerHand[0])}\n\nType \`!hit\` to draw a card or \`!stand\` to hold your hand.`});
+    const rank = 'A';  // Rank padrão é Ás
+    const suit = 'hearts';  // Naipe padrão é copas (hearts)
+
+       const buffer = await drawImageCard(rank, suit);
+        await channel.send({ files: [{ attachment: buffer, name: `${rank}_of_${suit}.png` }] });
+
+    // await drawImageCard(rank, suit)
+
+    // channel.send({content: `**Your hand:**\n${playerHand.map(drawAsciiCard).join('\t')}\n**Dealer's hand:**\n${drawAsciiCard(dealerHand[0])}\n\nType \`!hit\` to draw a card or \`!stand\` to hold your hand.`});
 }
 
 
