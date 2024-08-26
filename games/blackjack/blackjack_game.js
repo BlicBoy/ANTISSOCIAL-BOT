@@ -1,8 +1,8 @@
-const { createChannels, closeChannels, deleteChannel } = require("../helpers/createChannel");
-const { giveFirstCredits, getCredits } = require("../helpers/credits");
-const { checkRoom } = require("../helpers/manageRooms");
-const { dateFormater, deleteMessage } = require("../helpers/other");
-const { log } = require("../utils/winston");
+const { createChannels, closeChannels, deleteChannel } = require("../../helpers/createChannel");
+const { giveFirstCredits, getCredits } = require("../../helpers/credits");
+const { checkRoom } = require("../../helpers/manageRooms");
+const { dateFormater, deleteMessage } = require("../../helpers/other");
+const { log } = require("../../utils/winston");
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require("discord.js")
 
 const cardValues = {

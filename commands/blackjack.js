@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js")
 const { cooldown } = require('../helpers/other')
-const  { initGame } = require('../games/blackjack_game')
+const  { initGame } = require('../games/blackjack/blackjack_game')
 
 module.exports = {
   data: new SlashCommandBuilder()
