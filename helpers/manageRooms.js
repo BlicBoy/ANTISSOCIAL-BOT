@@ -1,7 +1,8 @@
 const GameResumes = require('../models/game-resumes');
 const { log } = require('../utils/winston');
 const { closeChannels } = require('./createChannel');
-const { sendDMBot } = require('./other');
+const { sendDMBot, checktActivity } = require('./other');
+const { messageBet } = require('./initGameRoulette')
 
 async function verifyOpenRooms(client) {
     try {
@@ -34,4 +35,32 @@ async function verifyOpenRooms(client) {
     }
 }
 
-module.exports = { verifyOpenRooms }
+/**
+ * CHECK IF EXIST ROOM
+ * @returns 
+ */
+async function checkRoom(interaction, game) {
+    try {
+      let activity = await checktActivity(interaction, game)
+      if (activity == null) {
+        return false //Dont have room
+      } else {
+        const channel = interaction.guild.channels.cache.get(activity.channel);
+        if (channel) {
+          await interaction.reply({ content: `🌕 Check out this channel ${channel} to continue playing 🤑`, ephemeral: true })
+          await messageBet(channel, interaction)
+          return true //User have activity dont create room
+        } else {
+          let data = await getCredits(activity.id_player)
+          await closeChannels(0, 'Force Close - ' + dateFormater(), game,activity.id_player,interaction, `/${game}`, data.credits)
+          return false //Room have problem create another
+        }
+      }
+    } catch (error) {
+      await closeChannels(0, 'ERROR TO VERIFY ROOM', 'roullete',activity.id_player,interaction, `/${game}`, null)
+      log.error('VERIFY ROOM: '+error)
+      return false; //Room have problem create another
+    }
+  }
+
+module.exports = { verifyOpenRooms , checkRoom }
