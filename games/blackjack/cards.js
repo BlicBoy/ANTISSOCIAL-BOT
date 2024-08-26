@@ -56,34 +56,35 @@ function drawAsciiCard(card) {
 }
 
 async function drawImageCard(rank, suit) {
-  try {
-      const canvas = createCanvas(width, height);
-      const ctx = canvas.getContext('2d');
+    // THIS SHIT DONT WORK :( 
+//   try {
+//       const canvas = createCanvas(width, height);
+//       const ctx = canvas.getContext('2d');
   
-      // Desenhar o fundo da carta
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, width, height);
-      ctx.strokeStyle = '#000000';
-      ctx.lineWidth = 5;
-      ctx.strokeRect(0, 0, width, height);
+//       // Desenhar o fundo da carta
+//       ctx.fillStyle = '#FFFFFF';
+//       ctx.fillRect(0, 0, width, height);
+//       ctx.strokeStyle = '#000000';
+//       ctx.lineWidth = 5;
+//       ctx.strokeRect(0, 0, width, height);
   
-      // Verificar e logar o caminho da imagem
-      const imagePath = path.join(__dirname, 'cardsImage', `${suit}.png`);
-      log.info('Loading image from:', imagePath);
-      const suitImage = await loadImage(imagePath);
-      ctx.drawImage(suitImage, width / 2 - 25, height / 2 - 25, 50, 50);
+//       // Verificar e logar o caminho da imagem
+//       const imagePath = path.join(__dirname, 'cardsImage', `${suit}.png`);
+//       log.info('Loading image from:', imagePath);
+//       const suitImage = await loadImage(imagePath);
+//       ctx.drawImage(suitImage, width / 2 - 25, height / 2 - 25, 50, 50);
   
-      // Escrever o valor da carta
-      ctx.fillStyle = suit === 'hearts' || suit === 'diamonds' ? '#FF0000' : '#000000'; // Vermelho para copas e ouros
-      ctx.font = 'bold 40px Arial';
-      ctx.fillText(rank, 20, 50);
-      ctx.fillText(rank, width - 40, height - 10);
+//       // Escrever o valor da carta
+//       ctx.fillStyle = suit === 'hearts' || suit === 'diamonds' ? '#FF0000' : '#000000'; // Vermelho para copas e ouros
+//       ctx.font = 'bold 40px Arial';
+//       ctx.fillText(rank, 20, 50);
+//       ctx.fillText(rank, width - 40, height - 10);
   
-      // Converter para buffer
-      return canvas.toBuffer();
-  } catch (error) {
-    log.error('Create image error: ' + error)
-  }
+//       // Converter para buffer
+//       return canvas.toBuffer();
+//   } catch (error) {
+//     log.error('Create image error: ' + error)
+//   }
 }
 
 module.exports =  { deck, generateDeck, calculateHand, drawCard, drawAsciiCard, drawImageCard }
