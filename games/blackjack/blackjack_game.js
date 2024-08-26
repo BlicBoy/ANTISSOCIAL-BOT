@@ -4,64 +4,12 @@ const { checkRoom } = require("../../helpers/manageRooms");
 const { dateFormater, deleteMessage } = require("../../helpers/other");
 const { log } = require("../../utils/winston");
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require("discord.js")
+const {deck, generateDeck, calculateHand, drawCard, drawAsciiCard} = require('./cards')
 
-const cardValues = {
-    '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 
-    '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11
-};
-let deck = [];
 let playerHand = [];
 let dealerHand = [];
 
-
-//Stupid Logic to generate deck and images
-
-/**
- * Generate random deck
- * @returns 
- */
-async function generateDeck() {
-    const suits = ['♠️', '♥️', '♣️', '♦️'];
-    for (let suit of suits) {
-        for (let card in cardValues) {
-            deck.push(`${card}${suit}`);
-        }
-    }
-    deck.sort(() => Math.random() - 0.5);
-}
-
-function calculateHand(hand) {
-    let value = 0;
-    let aceCount = 0;
-    for (let card of hand) {
-        let cardValue = card.slice(0, -1);
-        value += cardValues[cardValue];
-        if (cardValue === 'A') aceCount++;
-    }
-    while (value > 21 && aceCount) {
-        value -= 10;
-        aceCount--;
-    }
-    return value;
-}
-
-function drawCard(deck, hand) {
-    hand.push(deck.pop());
-}
-
-function drawAsciiCard(card) {
-    let rank = card.slice(0, -1);
-    let suit = card.slice(-1);
-    return `
-    +-----+
-    |${rank.padEnd(2)}   |
-    |  ${suit}  |
-    |   ${rank.padStart(2)}|
-    +-----+`;
-}
-
 //Game logic
-
 /**
  * Init game blackjack
  * @param {*} interaction 
