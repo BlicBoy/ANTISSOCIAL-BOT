@@ -60,7 +60,6 @@ function drawAsciiCard(card) {
     +-----+`;
 }
 
-
 //Game logic
 
 /**
