@@ -94,21 +94,32 @@ async function createMessage(channel, interaction, credits) {
 
 
 async function playGame(channel, interaction) {
-    await deleteMessage(interaction);
-    drawCard(deck, playerHand)
-    drawCard(deck, dealerHand);
-    drawCard(deck, playerHand);
-    drawCard(deck, dealerHand);
+   try {
+     await deleteMessage(interaction);
+     drawCard(deck, playerHand)
+     drawCard(deck, dealerHand);
+     drawCard(deck, playerHand);
+     drawCard(deck, dealerHand);
+ 
+     console.log(playerHand)
+ 
+     var playerHandImage = [];
+     //for in playerhand to create cards
+     for (let i = 0; i < playerHand.length; i++) {
+         var card = playerHand[i];
+         var rank = card.slice(0, card.length - 2);
+         var suit = card.slice(-2);
 
-    const rank = 'A';  // Rank padrão é Ás
-    const suit = 'hearts';  // Naipe padrão é copas (hearts)
+         var result =  await drawImageCard(rank, suit)
+         var card = `${rank}-${suit}.png`;
+         //add card to playerHandImage
+        if(result) playerHandImage.push(card)
+     }
 
-       const buffer = await drawImageCard(rank, suit);
-        await channel.send({ files: [{ attachment: buffer, name: `${rank}_of_${suit}.png` }] });
-
-    // await drawImageCard(rank, suit)
-
-    // channel.send({content: `**Your hand:**\n${playerHand.map(drawAsciiCard).join('\t')}\n**Dealer's hand:**\n${drawAsciiCard(dealerHand[0])}\n\nType \`!hit\` to draw a card or \`!stand\` to hold your hand.`});
+     channel.send({content: `**Your hand:**\n${playerHand.map(drawAsciiCard).join('\t')}\n**Dealer's hand:**\n${drawAsciiCard(dealerHand[0])}\n\nType \`!hit\` to draw a card or \`!stand\` to hold your hand.`});
+   } catch (error) {
+    log.error('Error: Play game blackjack - ' + error)
+   }
 }
 
 
