@@ -104,17 +104,33 @@ async function playGame(channel, interaction) {
      console.log(playerHand)
  
      var playerHandImage = [];
-     //for in playerhand to create cards
-     for (let i = 0; i < playerHand.length; i++) {
-         var card = playerHand[i];
-         var rank = card.slice(0, card.length - 2);
-         var suit = card.slice(-2);
+     var dealerHandImage = [];
 
-         var result =  await drawImageCard(rank, suit)
-         var card = `${rank}-${suit}.png`;
-         //add card to playerHandImage
-        if(result) playerHandImage.push(card)
-     }
+     playerHand.forEach(async element => {
+        log.info('Player hand: ' + element)
+
+        var card = element;
+        var rank = card.slice(0, card.length - 2);
+        var suit = card.slice(-2);
+
+        var result =  await drawImageCard(rank, suit)
+        var card = `${rank}-${suit}.png`;
+        //add card to playerHandImage
+       if(result) playerHandImage.push(card)
+     });
+
+     dealerHand.forEach(async element => {
+        log.info('Dealer hand: ' + element)
+
+        var card = element;
+        var rank = card.slice(0, card.length - 2);
+        var suit = card.slice(-2);
+
+        var result =  await drawImageCard(rank, suit)
+        var card = `${rank}-${suit}.png`;
+        //add card to dealerHandImage
+       if(result) dealerHandImage.push(card)
+     });
 
      channel.send({content: `**Your hand:**\n${playerHand.map(drawAsciiCard).join('\t')}\n**Dealer's hand:**\n${drawAsciiCard(dealerHand[0])}\n\nType \`!hit\` to draw a card or \`!stand\` to hold your hand.`});
    } catch (error) {

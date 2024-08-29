@@ -73,11 +73,10 @@ function drawRoundedRect(ctx, x, y, width, height, radius) {
 
 async function drawImageCard(rank, suit) {
     try {
-        // Desenhar o fundo da carta
+        if(fs.existsSync(`./cardsImage/${rank}-${suit}.png`)) return true;
+
         ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, width, height);
-
-        // Desenhar bordas arredondadas
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 5;
         drawRoundedRect(ctx, 0, 0, width, height, borderRadius);
@@ -85,12 +84,9 @@ async function drawImageCard(rank, suit) {
 
         ctx.fillStyle = suit === '♥️' || suit === '♦️' ? '#FF0000' : '#000000';
         ctx.font = 'bold 40px Arial';
-
-        // Desenhar o rank nos cantos
         ctx.fillText(rank, 20, 50);
         ctx.fillText(rank, width - 40, height - 10);
 
-        // Desenhar o símbolo do naipe no centro
         ctx.font = 'bold 60px Arial';
         const suitSymbol = suit;
         const textMetrics = ctx.measureText(suitSymbol);
@@ -99,7 +95,6 @@ async function drawImageCard(rank, suit) {
 
         ctx.fillText(suitSymbol, x, y);
 
-        // Salvar a imagem no diretório cardsImage
         fs.writeFileSync(`./cardsImage/${rank}-${suit}.png`, canvas.toBuffer());
         log.info('Imagem criada com sucesso!');
         return true;
