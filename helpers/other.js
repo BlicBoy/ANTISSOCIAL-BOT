@@ -1,5 +1,6 @@
 const GameResumes = require('../models/game-resumes');
 const { log } = require('../utils/winston');
+var timeout = []
 
 /**
  * Date formater
@@ -77,15 +78,28 @@ async function sendDM(interaction, message){
 async function sendDMBot(client, userId, message){
     try {
         const user = await client.users.fetch(userId).catch(() => null);
-        if (!user) console.log('User not found');
+        if (!user) log.info('User not found');
         await user.send(message).catch(() => {
-           log.info("User has DMs closed or has no mutual servers with the bot :(");
+           log.error("User has DMs closed or has no mutual servers with the bot :(");
         });
     } catch (error) {
         log.error(error)
         return false
     }
-    
 }
 
-module.exports = { dateFormater, openActivityGame, checktActivity, deleteMessage, sendDM, sendDMBot }
+async function cooldown(interaction) {
+    if (timeout.includes(interaction.user.id)) {
+        log.info(`User ${interaction.user.username} está a spammar o bot`)
+        await interaction.reply({ content: ' 🛑 You are on cooldown, try again in 1 minute 🛑', ephemeral: true })
+        return true
+    }
+    timeout.push(interaction.user.id)
+    setTimeout(() => {
+      timeout.shift()
+    }, 60000)
+
+    return false
+}
+
+module.exports = { dateFormater, openActivityGame, checktActivity, deleteMessage, sendDM, sendDMBot, cooldown }

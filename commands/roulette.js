@@ -5,11 +5,12 @@
  */
 
 const { SlashCommandBuilder } = require("discord.js")
-const { createChannels, closeChannels } = require("../helpers/createChannel")
-const { dateFormater, checktActivity } = require("../helpers/other")
+const { createChannels } = require("../helpers/createChannel")
+const { dateFormater } = require("../helpers/other")
 const { giveFirstCredits, getCredits } = require("../helpers/credits")
 const { messageBet } = require("../helpers/initGameRoulette")
 const { log } = require("../utils/winston")
+const { checkRoom } = require("../helpers/manageRooms")
 
 var timeout = []
 
@@ -36,7 +37,7 @@ module.exports = {
 async function initGame(interaction) {
 
   try {
-    haveGame = await checkRoom(interaction)
+    haveGame = await checkRoom(interaction, 'roullete')
 
     if (!haveGame) {
       await giveFirstCredits(interaction)
@@ -61,31 +62,3 @@ async function initGame(interaction) {
 
 }
 
-/**
- * CHECK IF EXIST ROOM
- * @returns 
- */
-async function checkRoom(interaction) {
-  try {
-    let activity = await checktActivity(interaction, 'roullete')
-    if (activity == null) {
-      return false //Dont have room
-    } else {
-      const channel = interaction.guild.channels.cache.get(activity.channel);
-      if (channel) {
-        await interaction.reply({ content: `🎡 Check out this channel ${channel} to continue playing 🎡`, ephemeral: true })
-        await messageBet(channel, interaction)
-        return true //User have activity dont create room
-      } else {
-        let data = await getCredits(activity.id_player)
-        await closeChannels(0, 'Force Close - ' + dateFormater(), 'roullete',activity.id_player,interaction, '/roulette', data.credits)
-        return false //Room have problem create another
-      }
-    }
-  } catch (error) {
-    await closeChannels(0, 'ERROR TO VERIFY ROOM', 'roullete',activity.id_player,interaction, '/roulette', null)
-    log.error('VERIFY ROOM: '+error)
-    return false; //Room have problem create another
-  }
-
-}

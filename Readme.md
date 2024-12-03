@@ -80,4 +80,16 @@ or
 ```bash
 npm install
 ```
+## Updates BlackJack game
 
+In this update we're going to implement the game of blackjack. To do this, some general logic had to be changed, new logic was added for the game and new libraries were added.
+The canvas libraries are required for the blackjack game. Just install them: 
+```bash
+npm install canvas
+```
+
+If you're using a pc with apple silicon, you have to install the dependencies with brew: 
+```bash
+brew install pkg-config cairo pango libpng jpeg giflib librsvg
+```
+Some bugs have been fixed.
